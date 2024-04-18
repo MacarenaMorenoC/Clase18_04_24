@@ -1,0 +1,180 @@
+Recordemos que usaremos DB NoSql orientada a
+Documentos.En particular usaremos el servidor
+Mongodb.
+
+Recordar que Mongodb es un servidor de base 
+de datos, por lo que para conectarse a él se
+debe tener un cliente.
+
+localhost:27017   (puerto)
+
+Todo servidor debe usar la pila de protocolos
+TCP/IP... el cual está dividido en una 
+serie de capas de comunicación.
+
+Como siempre se debe desarrollar, y para poder
+hacerlo en un pc y probar todos los servicios
+como si uno se conectase a un servidor remoto.
+Existe la IP 127.0.0.1 para darle un nombre
+a ese host se le llamo localhost.
+
+El cliente que tenemos es Mongodb Compass, el cual tiene
+dos formas de conectarse:
+ 1.- Interfaz gráfica.
+ 2.- Consola.
+
+También debemos saber que una base de datos
+no documental tiene equivalentes de esta
+forma:
+
+Tablas se llaman colecciones.
+Registros se llaman documentos.
+
+Actividad:
+
+Usaremos consola para lo siguiente:
+
+1.- Ver Base de Datos: show dbs
+(apareceran 3 BD admin,config,local)
+
+2.- Crear una Base de Datos: use demo1
+
+3.- veamos las Bases ahora: show dbs
+como observamos no aparece demo1.
+Esto porque para que la base en si se cree
+debe tener al menos una colección (tabla)
+
+4.- El promt está en demo1> por lo que
+allí usamos db.createCollection("Personas")
+
+Al hacer eso, se creará la base demo1 junto
+con la colección (tabla) Personas.
+
+Para insertar datos dedemos recordar que 
+usaremos Json {campo:valor,campo:valor}
+
+Por lo que Mongodb tiene dos formas:
+
+>db.Personas.insertOne({rut:1000,nombre:"Diego",apellido:"Maradona",sueldo:800.000,horas_extras:10})
+
+Para ver todo el contenido de la colección
+(tabla)
+
+Sql. select * from Personas
+>db.Personas.find()
+
+Los documentos deben tener un _id
+
+Para ingresar más uno (Many) se usa un arreglo
+>db.Personas.insertMany([{},{},{}])
+
+db.Personas.insertOne({rut:1000,nombre:"Diego",apellido:"Maradona",sueldo:800.000,horas_extras:10})
+
+Supongamos tenemos una persona que llegó a
+trabajar pero también debemos registrar de
+esa persona que es donante (si)
+
+>db.Personas.insertOne({rut:7000,nombre:"Tomas",apellido:"Garcia",sueldo:700000,horas_extras:0,donante:"SI"})
+
+POr lo que observo que no es necesario modificar
+todos para agregar un campo nuevo a uno en
+particular.
+
+Ahora haremos algunos listados, pero sabiendo
+que los conectores son así:
+
+=  $eq
+>  $gt  >= se agrega una e $gte
+<  $lt  <= se agrega una e $lte
+! negación $ne
+Or    $or
+
+Ejercicios
+
+1.- select * from personas
+    db.Personas.find()
+
+2.- select * from personas where rut=6000
+   db.Personas.find({rut:6000})
+
+3.- select * from personas where 
+sueldo=800000 and horas_extras=0
+db.Personas.find({sueldo:800000,horas_extras:0})
+
+4.- select nombre,apellido from Personas
+db.Personas.find({condicion},{ver})
+
+db.Personas.find({},{nombre:1,apellido:1,_id:0})
+
+5.-select * from Personas where sueldo>900000
+db.Personas.find({sueldo:{$gt:900000}})
+
+6.-select nombre from Personas where sueldo>900000
+db.Personas.find({sueldo:{$gt:900000}},{nombre:1,_id:0})
+
+7.- select * from Personas where 
+horas_extras>0 and horas_extras<20
+db.Personas.find({horas_extras:{$gt:0,$lt:20}})
+
+8.- select * from Personas 
+where sueldo<800000 or sueldo>1100000
+(a realizar)
+
+9.- select rut,nombre from Personas where 
+horas_extras>0
+
+sol.- db.Personas.find({horas_extras:{$gt:0}},{rut:1,nombre:1,_id:0})
+
+10.- Mostrar los datos de las personas que no
+tienen horas extras 
+sol.- db.Personas.find({horas_extras:{$eq:0}})
+o
+db.Personas.find({horas_extras:0})
+
+
+11.- Mostrar los datos de las personas que 
+   tienen horas extras y tienen sueldos mayores
+   a 900.000
+sol.
+db.Personas.find({horas_extras:{$gt:0},sueldo:{$gt:900000}})
+
+12.- Mostrar los datos de las personas que en su nombre 
+   tienen las letras ie (como un like)
+select * from Personas like '%ie%'
+db.Personas.find({nombre:/ie/})
+
+13.- Para contar la cantidad de registros
+se debe contar los documentos.
+
+>db.Personas.countDocuments()
+>db.Personas.find().count()
+
+Para saber cuantas personas tienen 
+horas extras.
+>db.Personas.countDocuments({horas_extras:{$gt:0}})
+
+>db.Personas.find({horas_extras:{$gt:0}}).count()
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
